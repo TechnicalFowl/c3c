@@ -325,13 +325,19 @@ enum Win32_SYM_TYPE
 	SYM_VIRTUAL
 }
 
-struct Win32_GUID
+struct Win32_GUID @compact
 {
 	CULong data1;
 	CUShort data2;
 	CUShort data3;
 	char[8] data4;
 }
+
+alias Win32_REFGUID = Win32_GUID*;
+alias Win32_IID = Win32_GUID;
+alias Win32_REFIID = Win32_GUID*;
+alias Win32_CLSID = Win32_GUID;
+alias Win32_REFCLSID = Win32_GUID*;
 
 struct Win32_IMAGEHLP_MODULE64
 {

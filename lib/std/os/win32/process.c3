@@ -89,6 +89,7 @@ extern fn Win32_HANDLE getCurrentProcess() @extern("GetCurrentProcess");
 extern fn Win32_DWORD getCurrentThreadId() @extern("GetCurrentThreadId");
 extern fn Win32_BOOL setHandleInformation(Win32_HANDLE hObject, Win32_DWORD dwMask, Win32_DWORD dwFlags) @extern("SetHandleInformation");
 extern fn Win32_HANDLE createEventA(Win32_LPSECURITY_ATTRIBUTES lpEventAttributes, Win32_BOOL bManualReset, Win32_BOOL bInitialState, Win32_LPCSTR lpName) @extern("CreateEventA");
+extern fn Win32_HANDLE createEventExA(Win32_LPSECURITY_ATTRIBUTES lpEventAttributes, Win32_LPCSTR lpName, Win32_DWORD dwFlags, Win32_DWORD dwDesiredAccess) @extern("CreateEventExA");
 extern fn Win32_BOOL createProcessW(Win32_LPCWSTR lpApplicationName, Win32_LPWSTR lpCommandLine, Win32_LPSECURITY_ATTRIBUTES lpProcessAttributes, Win32_LPSECURITY_ATTRIBUTES lpThreadAttributes, Win32_BOOL bInheritHandles, Win32_DWORD dwCreationFlags, Win32_LPVOID lpEnvironment, Win32_LPCWSTR lpCurrentDirectory, Win32_LPSTARTUPINFOW lpStartupInfo, Win32_LPPROCESS_INFORMATION lpProcessInformation) @extern("CreateProcessW");
 extern fn Win32_HANDLE createNamedPipeA(Win32_LPCSTR lpName, Win32_DWORD dwOpenMode, Win32_DWORD dwPipeMode, Win32_DWORD nMaxInstances, Win32_DWORD nOutBufferSize, Win32_DWORD nInBufferSize, Win32_DWORD nDefaultTimeOut, Win32_LPSECURITY_ATTRIBUTES lpSecurityAttributes) @extern("CreateNamedPipeA");
 extern fn Win32_BOOL getOverlappedResult(Win32_HANDLE hFile, Win32_LPOVERLAPPED lpOverlapped, Win32_LPDWORD lpNumberOfBytesTransferred, Win32_BOOL bWait) @extern("GetOverlappedResult");
@@ -118,6 +119,20 @@ extern fn Win32_BOOL symFromAddr(Win32_HANDLE hProcess, Win32_DWORD64 address, W
 extern fn Win32_BOOL symGetLineFromAddr64(Win32_HANDLE hProcess, Win32_DWORD64 dwAddr, Win32_PDWORD pdwDisplacement, Win32_PIMAGEHLP_LINE64 line) @extern("SymGetLineFromAddr64");
 extern fn Win32_WORD rtlCaptureStackBackTrace(Win32_DWORD framesToSkip, Win32_DWORD framesToCapture, Win32_PVOID *backTrace, Win32_PDWORD backTraceHash) @extern("RtlCaptureStackBackTrace");
 extern fn Win32_BOOL symGetModuleInfo64(Win32_HANDLE hProcess, Win32_DWORD64 qwAddr, Win32_PIMAGEHLP_MODULE64 moduleInfo) @extern("SymGetModuleInfo64");
+extern fn Win32_HMODULE getModuleHandleA(Win32_LPCSTR lpModuleName) @extern("GetModuleHandleA");
+fn Win32_HANDLE? get_module_handle_a(Win32_LPCSTR lpModuleName)
+{
+    Win32_HANDLE handle = getModuleHandleA(lpModuleName);
+    if (handle == null) get_last_error()!;
+    return handle;
+}
+extern fn Win32_HMODULE getModuleHandleW(Win32_LPCWSTR lpModuleName) @extern("GetModuleHandleW");
+fn Win32_HANDLE? get_module_handle_w(Win32_LPCWSTR lpModuleName)
+{
+    Win32_HANDLE handle = getModuleHandleW(lpModuleName);
+    if (handle == null) get_last_error()!;
+    return handle;
+}
 
 fn Win32_DWORD? load_modules()
 {
